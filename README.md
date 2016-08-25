@@ -1,6 +1,6 @@
 # smallscripts
 
-This repo contains small scripts than makes my life easier. Use it if you like it;)
+This repo contains small scripts that makes my life easier. Use it if you like it;)
 
 ## routetolocal
 
