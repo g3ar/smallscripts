@@ -1,0 +1,44 @@
+#!/usr/bin/env bash
+
+SCRIPTNAME=`basename "$0"`
+
+USAGE="This is script for routing all traffic or specific port from internet host to 
+LAN IP.
+Usage: 
+	$SCRIPTNAME <add|del> <internet host> <local ip> [tcp|udp]
+ - If ports are not specified all traffic will be routed.
+ - If proto is unused or wrong will be used 'all'"
+
+if [ ! "$1" ] || [ ! "$2" ] || [ ! "$3" ]; then
+	echo "$USAGE"
+	exit 1
+fi
+
+if [ "$1" = "add" ]; then 
+	ACTION="A"
+elif [ "$1" = "del" ]; then
+	ACTION="D"
+else
+	echo "$USAGE"
+	exit 1
+fi
+
+if [[ $4 =~ ^tcp|udp$ ]]; then
+	PROTO=$4
+else
+	PROTO="all"
+fi
+
+INTERNET_HOST=`echo $2 | awk -F: '{print $1}'`
+INTERNET_PORT=`echo $2 | awk -F: '{print $2}'`
+
+LOCAL_HOST=`echo $3 | awk -F: '{print $1}'`
+LOCAL_PORT=`echo $3 | awk -F: '{print $2}'`
+
+if [ ! "$INTERNET_PORT" ] || [ ! "$LOCAL_PORT" ]; then
+	iptables -t nat -$ACTION PREROUTING -p $PROTO -d $INTERNET_HOST -j DNAT --to-destination $LOCAL_HOST
+	iptables -t nat -$ACTION POSTROUTING -p $PROTO -d $LOCAL_HOST -j MASQUERADE
+else
+	iptables -t nat -$ACTION PREROUTING -p $PROTO -d $INTERNET_HOST --dport $INTERNET_PORT -j DNAT --to-destination $LOCAL_HOST:$LOCAL_PORT
+	iptables -t nat -$ACTION POSTROUTING -p $PROTO -d $LOCAL_HOST -j MASQUERADE
+fi
