@@ -2,9 +2,9 @@
 
 SCRIPTNAME=`basename "$0"`
 
-USAGE="This is script for routing all traffic or specific port from internet host to 
+USAGE="This is script for routing all traffic or specific port from internet host to
 LAN IP.
-Usage: 
+Usage:
 	$SCRIPTNAME <add|del> <internet host> <local ip> [tcp|udp]
  - If ports are not specified all traffic will be routed.
  - If proto is unused or wrong will be used 'all'"
@@ -14,7 +14,7 @@ if [ ! "$1" ] || [ ! "$2" ] || [ ! "$3" ]; then
 	exit 1
 fi
 
-if [ "$1" = "add" ]; then 
+if [ "$1" = "add" ]; then
 	ACTION="A"
 elif [ "$1" = "del" ]; then
 	ACTION="D"
@@ -42,3 +42,5 @@ else
 	iptables -t nat -$ACTION PREROUTING -p $PROTO -d $INTERNET_HOST --dport $INTERNET_PORT -j DNAT --to-destination $LOCAL_HOST:$LOCAL_PORT
 	iptables -t nat -$ACTION POSTROUTING -p $PROTO -d $LOCAL_HOST -j MASQUERADE
 fi
+
+# Developed by gear. You can contact me by misty.g3ar@gmail.com
