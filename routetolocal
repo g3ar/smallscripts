@@ -2,8 +2,8 @@
 
 SCRIPTNAME=`basename "$0"`
 
-USAGE="This is script for routing all traffic or specific port from internet host to
-LAN IP.
+USAGE="This is script for routing all traffic or specific port from internet
+host to LAN IP.
 Usage:
 	$SCRIPTNAME <add|del> <internet host> <local ip> [tcp|udp]
  - If ports are not specified all traffic will be routed.
