@@ -1,0 +1,5 @@
+#!/bin/bash
+
+echo "SUBSYSTEM==\"usb\", ATTR{idVendor}==\"04e8\", ATTR{idProduct}==\"6860\", MODE=\"0666\", OWNER=\"root\"" | sudo tee /etc/udev/rules.d/51-android.rules
+
+# Developed by gear. You can contact me by misty.g3ar@gmail.com
