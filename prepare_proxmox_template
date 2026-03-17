@@ -20,7 +20,7 @@ truncate -s 0 /etc/machine-id
 
 # Clear command history
 history -c
-/dev/null > ~/.bash_history
+rm ~/.bash_history
 
 # Remove temporary files
 rm -rf /tmp/*
