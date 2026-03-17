@@ -1,0 +1,34 @@
+#!/usr/bin/env bash
+
+# Script to prepare VM for convertation to Proxmox template
+
+# Update all packages to latest versions
+apt update && sudo apt upgrade -y
+
+# Install commonly needed tools
+apt install -y qemu-guest-agent cloud-init sudo mc htop vim-nox net-tools
+
+# Enable QEMU guest agent (allows Proxmox to query VM info)
+systemctl enable qemu-guest-agent
+systemctl start qemu-guest-agent
+
+# Remove SSH host keys (regenerated on first boot of clone)
+rm -f /etc/ssh/ssh_host_*
+
+# Clear machine ID
+truncate -s 0 /etc/machine-id
+
+# Clear command history
+history -c
+/dev/null > ~/.bash_history
+
+# Remove temporary files
+rm -rf /tmp/*
+rm -rf /var/tmp/*
+
+# Clear logs (optional but recommended)
+truncate -s 0 /var/log/wtmp
+truncate -s 0 /var/log/btmp
+find /var/log -type f -name "*.log" -exec truncate -s 0 {} \;
+
+# Developed by gear. You can contact me by misty.g3ar@gmail.com
